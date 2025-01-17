@@ -1,35 +1,36 @@
+import { Buffer } from 'buffer';
 import React, {
   createContext,
   createElement,
   useEffect,
   useState,
-  ReactNode,
+  type ReactNode,
 } from 'react';
-import { Buffer } from 'buffer';
-import {
+import type {
+  CustomAvatarProps,
   CustomTheme,
   Languages,
   Mode,
   Theme,
-  CustomAvatarProps,
 } from '../types';
 
 import defaultTheme from '../styles/defaultTheme';
 
-import ConnectKitModal from '../components/ConnectModal';
 import { ThemeProvider } from 'styled-components';
-import { useThemeFont } from '../hooks/useGoogleFont';
-import { SIWEContext } from './../siwe';
+import { WagmiContext, useAccount } from 'wagmi';
+import ConnectKitModal from '../components/ConnectModal';
+import { useChainIsSupported } from '../hooks/useChainIsSupported';
 import { useChains } from '../hooks/useChains';
 import {
   useConnectCallback,
-  useConnectCallbackProps,
+  type useConnectCallbackProps,
 } from '../hooks/useConnectCallback';
-import { isFamily } from '../utils/wallets';
 import { useConnector } from '../hooks/useConnectors';
-import { WagmiContext, useAccount } from 'wagmi';
+import { useThemeFont } from '../hooks/useGoogleFont';
+import { isFamily } from '../utils/wallets';
+import { SIWEContext } from './../siwe';
 import { Web3ContextProvider } from './contexts/web3';
-import { useChainIsSupported } from '../hooks/useChainIsSupported';
+import { StatusState } from '../siwe/SIWEContext';
 
 export const routes = {
   ONBOARDING: 'onboarding',
@@ -227,16 +228,20 @@ export const ConnectKitProvider = ({
 
 	const signInWithEthereum = SIWE?.enabled ?? false;
 
-	const isSignedIn = !!SIWE?.session?.data?.address ?? false;
+  // setting this to true if address does not exist so when the user reloads the pop-up won't immidiately show
+  const isSignedIn = !!SIWE?.session?.data?.address;  
 
+  
 	useEffect(() => {
-		if (!SIWE || !signInWithEthereum) return;
+    if (!SIWE || !signInWithEthereum) return;
 
-		if (isConnected && SIWE.enforceSignIn && !isSignedIn) {
+    const isLoading = SIWE.session.isLoading || SIWE.nonce.isLoading
+
+		if (isConnected && SIWE.enforceSignIn && !isSignedIn && !isLoading) {
 			setOpen(true);
 			setRoute(routes.SIGNINWITHETHEREUM);
 		}
-	}, [isConnected, SIWE, signInWithEthereum, isSignedIn]);
+	}, [isConnected, SIWE, signInWithEthereum, isSignedIn, SIWE?.status]);
 
   const value = {
     theme: ckTheme,
