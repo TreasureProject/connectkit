@@ -7247,8 +7247,8 @@ __metadata:
     typescript: ^5.0.4
   peerDependencies:
     "@tanstack/react-query": ">=5.0.0"
-    react: 17.x || 18.x
-    react-dom: 17.x || 18.x
+    react: 17.x || 18.x || 19.x
+    react-dom: 17.x || 18.x || 19.x
     viem: 2.x
     wagmi: 2.x
   languageName: unknown
