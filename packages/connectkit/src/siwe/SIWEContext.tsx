@@ -37,6 +37,7 @@ export type SIWEConfig = {
   signOutOnDisconnect?: boolean;
   signOutOnAccountChange?: boolean;
   signOutOnNetworkChange?: boolean;
+  enforceSignIn?: boolean;
 };
 
 export type SIWEContextValue = Required<SIWEConfig> & {

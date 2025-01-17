@@ -30,6 +30,7 @@ export const SIWEProvider = ({
   signOutOnNetworkChange = true,
   onSignIn,
   onSignOut,
+  enforceSignIn = false,
   ...siweConfig
 }: Props) => {
   const [status, setStatus] = useState<StatusState>(StatusState.READY);
@@ -182,6 +183,7 @@ export const SIWEProvider = ({
         nonce,
         session,
         signIn,
+        enforceSignIn,
         signOut: signOutAndRefetch,
         status,
         resetStatus,

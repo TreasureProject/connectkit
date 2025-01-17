@@ -37,9 +37,12 @@ const ConnectModal: React.FC<{
 
   //if chain is unsupported we enforce a "switch chain" prompt
   const closeable = !(
-    context.options?.enforceSupportedChains &&
-    isConnected &&
-    !chainIsSupported
+    (context.options?.enforceSupportedChains &&
+      isConnected &&
+      !chainIsSupported) ||
+    (context.signInWithEthereum && 
+      context.enforceSignIn && 
+      !context.isSignedIn)  // Added SIWE condition
   );
 
   const showBackButton =

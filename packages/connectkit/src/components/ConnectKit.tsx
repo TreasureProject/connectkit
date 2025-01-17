@@ -66,6 +66,8 @@ type ContextValue = {
   errorMessage: Error;
   options?: ConnectKitOptions;
   signInWithEthereum: boolean;
+  isSignedIn: boolean;
+  enforceSignIn: boolean;
   debugMode?: boolean;
   log: (...props: any) => void;
   displayError: (message: string | React.ReactNode | null, code?: any) => void;
@@ -221,6 +223,21 @@ export const ConnectKitProvider = ({
 
   const log = debugMode ? console.log : () => {};
 
+  const SIWE = React.useContext(SIWEContext);
+
+	const signInWithEthereum = SIWE?.enabled ?? false;
+
+	const isSignedIn = !!SIWE?.session?.data?.address ?? false;
+
+	useEffect(() => {
+		if (!SIWE || !signInWithEthereum) return;
+
+		if (isConnected && SIWE.enforceSignIn && !isSignedIn) {
+			setOpen(true);
+			setRoute(routes.SIGNINWITHETHEREUM);
+		}
+	}, [isConnected, SIWE, signInWithEthereum, isSignedIn]);
+
   const value = {
     theme: ckTheme,
     setTheme,
@@ -236,8 +253,10 @@ export const ConnectKitProvider = ({
     setRoute,
     connector,
     setConnector,
-    signInWithEthereum: React.useContext(SIWEContext)?.enabled ?? false,
+    signInWithEthereum,
     onConnect,
+    isSignedIn,
+    enforceSignIn: SIWE?.enforceSignIn ?? false,
     // Other configuration
     options: opts,
     errorMessage,

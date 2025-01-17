@@ -14,7 +14,7 @@ const config = createConfig(
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <WagmiProvider config={config}>
-      <siweClient.Provider>
+      <siweClient.Provider enforceSignIn>
         <ConnectKitProvider>
           <Component {...pageProps} />
         </ConnectKitProvider>
