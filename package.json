@@ -26,7 +26,8 @@
     "build:vite": "yarn build && yarn workspace vite build",
     "build:testbench": "yarn build && yarn build:connectkit-next-siwe && yarn workspace testbench build",
     "build:ci": "yarn workspaces foreach -R run build",
-    "lint:ci": "yarn workspaces foreach -R run lint"
+    "lint:ci": "yarn workspaces foreach -R run lint",
+    "prepublish": "yarn build"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^13.1.3",

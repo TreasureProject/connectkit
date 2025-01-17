@@ -1,3 +1,7 @@
+# 1.8.4
+
+Empty
+
 # 1.8.3
 
 This update upgrades the peer dependency `react` to `19.x`.
